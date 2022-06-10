@@ -44,6 +44,7 @@ if [[ $check_depth -eq -1 ]] || [[ $cur_depth -eq $check_depth ]]; then
   eval serial="\$tls_serial_${cur_depth}"
 
   if [[ -n $serial ]]; then
+    date=$(date +"%a %b %d %T %Y")
     status=$(openssl ocsp \
                     "$nonce" \
                     -verify_other "$issuer" \
@@ -52,9 +53,6 @@ if [[ $check_depth -eq -1 ]] || [[ $cur_depth -eq $check_depth ]]; then
                     -serial "${serial}" \
                     -url "$ocsp_url" \
                     -header "Host" "ocsp.acm-pca.us-east-1.amazonaws.com" 2>&1)
-
-    date=$(date +"%a %b %d %T %Y")
-
     if [[ $? -eq 0 ]]; then
 
       # check if ocsp didn't report any errors
